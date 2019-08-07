@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Payments from './Payments';
 
 class Header extends Component {
 renderContent() {
-    
     switch (this.props.auth) {
         case null:
             return;
@@ -14,7 +15,11 @@ renderContent() {
             );
 
         default: 
-            return <li><a href="/api/logout">Logout</a></li>;
+            return <div>
+                <li><Payments /></li>
+                <li style={{ margin: '0 10px' }}>Credits: {this.props.auth.credits}</li>
+                <li><a href="/api/logout">Logout</a></li>
+                </div>;
         
     }
 }
@@ -23,9 +28,12 @@ renderContent() {
         return (
             <nav>
                 <div className="nav-wrapper">
-                    <a className="left brand-logo" href="/">
+                    <Link 
+                        to={this.props.auth ? '/surveys' : '/'}
+                        className="left brand-logo" 
+                    >
                         Emaily
-                    </a>
+                    </Link>
                     <ul className="right">
                         {this.renderContent()}
                     </ul>
@@ -35,7 +43,7 @@ renderContent() {
     }
 }
 
-function mapStateToProps(auth) {
+function mapStateToProps({auth}) {
     return { auth };
 }
 export default connect(mapStateToProps)(Header);
